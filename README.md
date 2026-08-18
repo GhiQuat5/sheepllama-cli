@@ -15,8 +15,9 @@ A blazing fast, minimalist command-line interface (CLI) tool for interacting wit
 
 ## 🛠️ Installation
 
-1. **Navigate** to your local project directory:
+1. **Clone** the repository and **navigate** to your local project directory:
    ```bash
+   git clone https://github.com/GhiQuat5/sheepllama-cli
    cd sheepllama-cli
    ```
 
