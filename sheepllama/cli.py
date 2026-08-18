@@ -59,11 +59,11 @@ def interactive_chat(client, model, system_prompt):
             break
 
 def main():
-    # Hard runtime block ensuring execution only happens on 3.10 - 3.14
-    if sys.version_info >= (3, 15):
+    # Enforce strict Python 3.14 check exclusively
+    if sys.version_info.major != 3 or sys.version_info.minor != 14:
         console.print(
-            f"[bold red]Error:[/bold red] Python {sys.version_info.major}.{sys.version_info.minor} is unsupported.\n"
-            "[yellow]Sheepllama-CLI strictly supports Python 3.10, 3.11, 3.12, 3.13, and 3.14 only.[/yellow]"
+            f"[bold red]Error:[/bold red] Python {sys.version_info.major}.{sys.version_info.minor} is completely unsupported.\n"
+            "[yellow]Sheepllama-CLI strictly requires Python 3.14 exclusively.[/yellow]"
         )
         sys.exit(1)
 
@@ -75,19 +75,16 @@ def main():
 
     client = get_client()
 
-    # Case 1: Standard Input / File Piping (e.g., cat text.log | sheepllama)
     if not sys.stdin.isatty():
         piped_data = sys.stdin.read().strip()
         final_prompt = f"{args.prompt}\n\n{piped_data}" if args.prompt else piped_data
         stream(client, [{"role": "system", "content": args.system}, {"role": "user", "content": final_prompt}], args.model)
         sys.exit(0)
 
-    # Case 2: No inline string provided -> Start persistent chat loop
     if not args.prompt:
         interactive_chat(client, args.model, args.system)
         sys.exit(0)
 
-    # Case 3: Simple quick single prompt command
     stream(client, [{"role": "system", "content": args.system}, {"role": "user", "content": args.prompt}], args.model)
 
 if __name__ == "__main__":
